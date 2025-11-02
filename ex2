@@ -1,0 +1,109 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <map>
+#include <algorithm>
+using namespace std;
+void longestWord(const string &str) {
+    stringstream ss(str);
+    string word, longest;
+    int maxLen = 0;
+    while (ss >> word) {
+        if (word.length() > maxLen) {
+            maxLen = word.length();
+            longest = word;
+        }
+    }
+    cout << "The longest word: " << longest << " (Length: " << maxLen << ")" << endl;
+}
+void charFrequency(const string &str, char ch) {
+    int count = 0;
+    for (char c : str) {
+        if (c == ch)
+            count++;
+    }
+    cout << "Character '" << ch << "' occurs " << count << " times in the string." << endl;
+}
+void checkPalindrome(const string &str) {
+    string cleaned;
+    for (char c : str) {
+        if (isalnum(c)) 
+            cleaned += tolower(c);
+    }
+    string rev = cleaned;
+    reverse(rev.begin(), rev.end());
+    if (cleaned == rev)
+        cout << "The string is a palindrome." << endl;
+    else
+        cout << "The string is NOT a palindrome." << endl;
+}
+void findSubstringIndex(const string &str, const string &substr) {
+    size_t pos = str.find(substr);
+    if (pos != string::npos)
+        cout << "Substring '" << substr << "' first appears at index " << pos << "." << endl;
+    else
+        cout << "Substring '" << substr << "' not found in the string." << endl;
+}
+void wordCount(const string &str) {
+    stringstream ss(str);
+    string word;
+    map<string, int> freq;
+    while (ss >> word) {
+        word.erase(remove_if(word.begin(), word.end(), ::ispunct), word.end());
+        transform(word.begin(), word.end(), word.begin(), ::tolower);
+        freq[word]++;
+    }
+    cout << "\nWord occurrences:\n";
+    for (auto &w : freq) {
+        cout << w.first << " : " << w.second << endl;
+    }
+}
+int main() {
+    string str;
+    int choice;
+    char ch;
+    string substr;
+    cout << "Enter a string: ";
+    getline(cin, str);
+    do {
+        cout << "\n===== STRING OPERATIONS MENU =====" << endl;
+        cout << "1. Display word with longest length" << endl;
+        cout << "2. Frequency of a character" << endl;
+        cout << "3. Check if string is palindrome" << endl;
+        cout << "4. Find index of first appearance of substring" << endl;
+        cout << "5. Count occurrences of each word" << endl;
+        cout << "6. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore();
+        switch (choice) {
+            case 1:
+                longestWord(str);
+                break;
+            case 2:
+                cout << "Enter character to find frequency: ";
+                cin >> ch;
+                charFrequency(str, ch);
+                break;
+            case 3:
+                checkPalindrome(str);
+                break;
+            case 4:
+                cout << "Enter substring to search: ";
+                getline(cin, substr);
+                findSubstringIndex(str, substr);
+                break;
+            case 5:
+                wordCount(str);
+                break;
+            case 6:
+                cout << "Exiting program..." << endl;
+                break;
+            default:
+                cout << "Invalid choice! Try again." << endl;
+        }
+
+    } while (choice != 6);
+
+    return 0;
+}
