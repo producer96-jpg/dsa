@@ -2,32 +2,32 @@
 #include <stack>
 #include <string>
 using namespace std;
-bool isWellParenthesized(const string& expr) {
-    stack<char> s;
-    for (char ch : expr) {
+bool isMatchingPair(char open, char close) {
+    return (open == '(' && close == ')') ||
+           (open == '{' && close == '}') ||
+           (open == '[' && close == ']');
+}
+bool isWellParenthesized(const string &exp) {
+    stack<char> st;
+    for (char ch : exp) {
         if (ch == '(' || ch == '{' || ch == '[') {
-            s.push(ch);
-        }
+            st.push(ch);
+        } 
         else if (ch == ')' || ch == '}' || ch == ']') {
-            if (s.empty())  // No opening bracket to match
+            if (st.empty() || !isMatchingPair(st.top(), ch))
                 return false;
-            char top = s.top();
-            s.pop();
-            if ((ch == ')' && top != '(') ||
-                (ch == '}' && top != '{') ||
-                (ch == ']' && top != '['))
-                return false;
+            st.pop();
         }
     }
-    return s.empty();
+    return st.empty();
 }
 int main() {
     string expression;
-    cout << "Enter an expression: ";
+    cout << "Enter expression: ";
     getline(cin, expression);
     if (isWellParenthesized(expression))
-        cout << "The expression is well parenthesized." << endl;
+        cout << "Expression is well parenthesized!" << endl;
     else
-        cout << "The expression is NOT well parenthesized." << endl;
+        cout << "Expression is not well parenthesized!" << endl;
     return 0;
 }
