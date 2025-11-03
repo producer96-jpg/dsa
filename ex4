@@ -1,62 +1,55 @@
 #include <iostream>
 using namespace std;
-void selectionSort(float arr[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        int minIndex = i;
-        for (int j = i + 1; j < n; j++) {
-            if (arr[j] < arr[minIndex])
-                minIndex = j;
-        }
-        float temp = arr[i];
-        arr[i] = arr[minIndex];
-        arr[minIndex] = temp;
-    }
-}
-void bubbleSort(float arr[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                float temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-}
-void displayTopFive(float arr[], int n) {
-    cout << "\nTop Five Scores:\n";
-    int count = (n < 5) ? n : 5;  
-    for (int i = n - 1; i >= n - count; i--) {
-        cout << arr[i] << "%  ";
-    }
-    cout << endl;
-}
-int main() {
+class Student {
+    float per[50];
     int n;
-    cout << "Enter number of students: ";
-    cin >> n;
-    float percentages[n];
-    cout << "Enter percentage of each student:\n";
-    for (int i = 0; i < n; i++) {
-        cout << "Student " << i + 1 << ": ";
-        cin >> percentages[i];
+public:
+    void getData() {
+        cout << "Enter number of students: ";
+        cin >> n;
+        cout << "Enter percentages:\n";
+        for(int i=0;i<n;i++) cin >> per[i];
     }
-    float selectionArr[n], bubbleArr[n];
-    for (int i = 0; i < n; i++) {
-        selectionArr[i] = percentages[i];
-        bubbleArr[i] = percentages[i];
+    void selectionSort() {
+        for(int i=0;i<n-1;i++) {
+            int min=i;
+            for(int j=i+1;j<n;j++)
+                if(per[j]<per[min])
+                    min=j;
+            float temp=per[i];
+            per[i]=per[min];
+            per[min]=temp;
+        }
+        cout<<"\nSelection Sort (Ascending): ";
+        for(int i=0;i<n;i++) cout<<per[i]<<" ";
+        cout<<endl;
     }
-    selectionSort(selectionArr, n);
-    cout << "\nAfter Selection Sort (Ascending Order):\n";
-    for (int i = 0; i < n; i++)
-        cout << selectionArr[i] << " ";
-    cout << endl;
-    displayTopFive(selectionArr, n);
-    bubbleSort(bubbleArr, n);
-    cout << "\nAfter Bubble Sort (Ascending Order):\n";
-    for (int i = 0; i < n; i++)
-        cout << bubbleArr[i] << " ";
-    cout << endl;
-    displayTopFive(bubbleArr, n);
+    void bubbleSort() {
+        for(int i=0;i<n-1;i++)
+            for(int j=0;j<n-i-1;j++)
+                if(per[j]>per[j+1]) {
+                    float t=per[j];
+                    per[j]=per[j+1];
+                    per[j+1]=t;
+                }
+        cout<<"\nBubble Sort (Ascending): ";
+        for(int i=0;i<n;i++) cout<<per[i]<<" ";
+        cout<<endl;
+    }
+    void topFive() {
+        cout<<"\nTop Five Scores: ";
+        int k = (n<5)?n:5;
+        for(int i=n-1;i>=n-k;i--)
+            cout<<per[i]<<" ";
+        cout<<endl;
+    }
+};
+int main() {
+    Student s;
+    s.getData();
+    s.selectionSort();
+    s.topFive();
+    s.bubbleSort();
+    s.topFive();
     return 0;
 }
