@@ -1,60 +1,52 @@
 #include <iostream>
-#include <algorithm>
+#include <algorithm>  
 using namespace std;
-int linearSearch(int arr[], int n, int key, int &comparisons) {
-    comparisons = 0;
-    for (int i = 0; i < n; i++) {
-        comparisons++;
-        if (arr[i] == key)
-            return i; 
+bool linearSearch(int arr[], int size, int key) {
+    int comparison = 0;
+    for (int i = 0; i < size; i++) {
+        comparison++;
+        if (arr[i] == key) {
+            cout << "Student attended program.\n";
+            cout << "Comparisons in Linear Search = " << comparison << endl;
+            return true;
+        }
     }
-    return -1; 
+    cout << "Student not attended.\n";
+    cout << "Comparisons in Linear Search = " << comparison << endl;
+    return false;
 }
-int binarySearch(int arr[], int n, int key, int &comparisons) {
-    int low = 0, high = n - 1;
-    comparisons = 0;
+bool binarySearch(int arr[], int size, int key) {
+    int low = 0, high = size - 1, comparison = 0;
     while (low <= high) {
+        comparison++;
         int mid = (low + high) / 2;
-        comparisons++;
-        if (arr[mid] == key)
-            return mid; 
+        if (arr[mid] == key) {
+            cout << "Student attended program.\n";
+            cout << "Comparisons in Binary Search = " << comparison << endl;
+            return true;
+        }
         else if (arr[mid] < key)
             low = mid + 1;
         else
             high = mid - 1;
     }
-    return -1;
+    cout << "Student still not attended.\n";
+    cout << "Comparisons in Binary Search = " << comparison << endl;
+    return false;
 }
 int main() {
-    int n;
-    cout << "Enter number of students who attended training: ";
-    cin >> n;
-    int rollNumbers[n];
-    cout << "Enter roll numbers in random order:\n";
-    for (int i = 0; i < n; i++)
-        cin >> rollNumbers[i];
-    int key;
+    int arr[50], size, key;
+    cout << "Enter number of students: ";
+    cin >> size;
+    cout << "Enter roll numbers of students:\n";
+    for (int i = 0; i < size; i++)
+        cin >> arr[i];
     cout << "Enter roll number to search: ";
     cin >> key;
-    int linearComparisons = 0;
-    int linearResult = linearSearch(rollNumbers, n, key, linearComparisons);
-    int sortedArr[n];
-    copy(rollNumbers, rollNumbers + n, sortedArr);
-    sort(sortedArr, sortedArr + n);
-    int binaryComparisons = 0;
-    int binaryResult = binarySearch(sortedArr, n, key, binaryComparisons);
-    cout << "\n--- Search Results ---\n";
-    if (linearResult != -1)
-        cout << "Linear Search: Student found (Index: " << linearResult << ")\n";
-    else
-        cout << "Linear Search: Student not found.\n";
-    if (binaryResult != -1)
-        cout << "Binary Search: Student found (Index in sorted list: " << binaryResult << ")\n";
-    else
-        cout << "Binary Search: Student not found.\n";
-    cout << "\n--- Comparison of Algorithms ---\n";
-    cout << "Linear Search comparisons: " << linearComparisons << endl;
-    cout << "Binary Search comparisons: " << binaryComparisons << endl;
-
+    cout << "\n--- Linear Search ---\n";
+    linearSearch(arr, size, key);
+    sort(arr, arr + size);
+    cout << "\n--- Binary Search ---\n";
+    binarySearch(arr, size, key);
     return 0;
 }
