@@ -97,7 +97,7 @@ int main() {
                 wordCount(str);
                 break;
             case 6:
-                cout << "Exiting program..." << endl;
+                cout << "Exiting program" << endl;
                 break;
             default:
                 cout << "Invalid choice! Try again." << endl;
