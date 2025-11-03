@@ -1,212 +1,78 @@
 #include <iostream>
 #include <string>
 using namespace std;
-struct Node {
+class Node {
+public:
     int prn;
     string name;
     Node* next;
+    Node(int p, string n) { prn = p; name = n; next = NULL; }
 };
 class Club {
     Node* head;
 public:
-    Club() {
-        head = nullptr;
-    }
+    Club() { head = NULL; }
     void addPresident(int prn, string name) {
-        Node* newNode = new Node{prn, name, nullptr};
-        if (head != nullptr) {
-            newNode->next = head;
-        }
-        head = newNode;
-        cout << "President added successfully.\n";
+        Node* t = new Node(prn, name);
+        t->next = head;
+        head = t;
     }
     void addSecretary(int prn, string name) {
-        Node* newNode = new Node{prn, name, nullptr};
-        if (head == nullptr) {
-            head = newNode;
-            return;
-        }
-        Node* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-        cout << "Secretary added successfully.\n";
+        Node* t = new Node(prn, name);
+        if (!head) head = t;
+        else { Node* c = head; while (c->next) c = c->next; c->next = t; }
     }
     void addMember(int prn, string name) {
-        if (head == nullptr) {
-            cout << "Add President first!\n";
-            return;
-        }
-        Node* newNode = new Node{prn, name, nullptr};
-        Node* temp = head;
-        while (temp->next != nullptr && temp->next->next != nullptr) {
-            temp = temp->next;
-        }
-        newNode->next = temp->next;
-        temp->next = newNode;
-        cout << "Member added successfully.\n";
-    }
-    void deletePresident() {
-        if (head == nullptr) {
-            cout << "No members to delete.\n";
-            return;
-        }
-        Node* temp = head;
-        head = head->next;
-        delete temp;
-        cout << "President deleted successfully.\n";
-    }
-    void deleteSecretary() {
-        if (head == nullptr) {
-            cout << "No members to delete.\n";
-            return;
-        }
-        Node* temp = head;
-        Node* prev = nullptr;
-        while (temp->next != nullptr) {
-            prev = temp;
-            temp = temp->next;
-        }
-        if (prev != nullptr)
-            prev->next = nullptr;
-        else
-            head = nullptr;
-        delete temp;
-        cout << "Secretary deleted successfully.\n";
+        if (!head) { head = new Node(prn, name); return; }
+        Node* t = head;
+        while (t->next && t->next->next) t = t->next;
+        Node* n = new Node(prn, name);
+        n->next = t->next;
+        t->next = n;
     }
     void deleteMember(int prn) {
-        if (head == nullptr) {
-            cout << "List is empty.\n";
-            return;
-        }
-        Node* temp = head;
-        Node* prev = nullptr;
-
-        while (temp != nullptr && temp->prn != prn) {
-            prev = temp;
-            temp = temp->next;
-        }
-        if (temp == nullptr) {
-            cout << "Member with PRN " << prn << " not found.\n";
-            return;
-        }
-        if (prev == nullptr) { 
-            head = temp->next;
-        } else {
-            prev->next = temp->next;
-        }
-        delete temp;
-        cout << "Member deleted successfully.\n";
+        if (!head) return;
+        if (head->prn == prn) { Node* temp = head; head = head->next; delete temp; return; }
+        Node* c = head;
+        while (c->next && c->next->prn != prn) c = c->next;
+        if (c->next) { Node* temp = c->next; c->next = temp->next; delete temp; }
     }
     void display() {
-        if (head == nullptr) {
-            cout << "No members in the club.\n";
-            return;
-        }
-        Node* temp = head;
-        cout << "\n--- Club Members ---\n";
-        cout << "PRN\tName\t\tPosition\n";
-        int count = 1;
-        while (temp != nullptr) {
-            if (temp == head)
-                cout << temp->prn << "\t" << temp->name << "\t(President)\n";
-            else if (temp->next == nullptr)
-                cout << temp->prn << "\t" << temp->name << "\t(Secretary)\n";
-            else
-                cout << temp->prn << "\t" << temp->name << "\t(Member)\n";
-            temp = temp->next;
-            count++;
-        }
+        Node* t = head;
+        while (t) { cout << t->prn << " " << t->name << " -> "; t = t->next; }
+        cout << "NULL\n";
     }
-    int countMembers() {
-        int count = 0;
-        Node* temp = head;
-        while (temp != nullptr) {
-            count++;
-            temp = temp->next;
-        }
-        return count;
+    int count() {
+        int c = 0; Node* t = head;
+        while (t) { c++; t = t->next; }
+        return c;
     }
-    void concatenate(Club& other) {
-        if (head == nullptr) {
-            head = other.head;
-        } else {
-            Node* temp = head;
-            while (temp->next != nullptr) {
-                temp = temp->next;
-            }
-            temp->next = other.head;
-        }
-        other.head = nullptr;
-        cout << "Lists concatenated successfully.\n";
+    Node* getHead() { return head; }
+    void setHead(Node* h) { head = h; }
+    static Club concat(Club& A, Club& B) {
+        if (!A.head) return B;
+        Node* t = A.head;
+        while (t->next) t = t->next;
+        t->next = B.head;
+        return A;
     }
 };
 int main() {
-    Club divA, divB, result;
-    int choice, prn;
-    string name;
-    while (true) {
-        cout << "\n\n------ Club Management ------";
-        cout << "\n1. Add President";
-        cout << "\n2. Add Secretary";
-        cout << "\n3. Add Member";
-        cout << "\n4. Delete President";
-        cout << "\n5. Delete Secretary";
-        cout << "\n6. Delete Member";
-        cout << "\n7. Display Members";
-        cout << "\n8. Count Members";
-        cout << "\n9. Concatenate Two Divisions";
-        cout << "\n10. Exit";
-        cout << "\nEnter your choice: ";
-        cin >> choice;
-        switch (choice) {
-            case 1:
-                cout << "Enter PRN and Name of President: ";
-                cin >> prn >> name;
-                divA.addPresident(prn, name);
-                break;
-            case 2:
-                cout << "Enter PRN and Name of Secretary: ";
-                cin >> prn >> name;
-                divA.addSecretary(prn, name);
-                break;
-            case 3:
-                cout << "Enter PRN and Name of Member: ";
-                cin >> prn >> name;
-                divA.addMember(prn, name);
-                break;
-            case 4:
-                divA.deletePresident();
-                break;
-            case 5:
-                divA.deleteSecretary();
-                break;
-            case 6:
-                cout << "Enter PRN of member to delete: ";
-                cin >> prn;
-                divA.deleteMember(prn);
-                break;
-            case 7:
-                divA.display();
-                break;
-            case 8:
-                cout << "Total members: " << divA.countMembers() << endl;
-                break;
-            case 9:
-                cout << "\n--- Enter Division B Members ---\n";
-                divB.addPresident(201, "Riya");
-                divB.addMember(202, "Sam");
-                divB.addSecretary(203, "John");
-                divA.concatenate(divB);
-                cout << "After concatenation:\n";
-                divA.display();
-                break;
-            case 10:
-                cout << "Exiting program.\n";
-                return 0;
-            default:
-                cout << "Invalid choice.\n";
-        }
-    }
+    Club divA, divB;
+    divA.addPresident(1, "Pres_A");
+    divA.addMember(2, "Alice");
+    divA.addMember(3, "Bob");
+    divA.addSecretary(4, "Sec_A");
+    divB.addPresident(5, "Pres_B");
+    divB.addMember(6, "Charlie");
+    divB.addSecretary(7, "Sec_B");
+    cout << "Division A:\n"; divA.display();
+    cout << "Division B:\n"; divB.display();
+    cout << "\nAfter concatenating both divisions:\n";
+    Club all = Club::concat(divA, divB);
+    all.display();
+    cout << "Total members in combined list: " << all.count() << endl;
+    cout << "\nDeleting PRN 3 (Bob):\n";
+    all.deleteMember(3);
+    all.display();
 }
