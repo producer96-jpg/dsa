@@ -1,88 +1,70 @@
 #include <iostream>
-#define MAX 5 
+#include <ios>
+#include <limits>
 using namespace std;
+#define MAX 5
 class PizzaParlor {
-private:
-    int orders[MAX];
+    int q[MAX];
     int front, rear;
-    int count;  
 public:
-    PizzaParlor() {
-        front = -1;
-        rear = -1;
-        count = 0;
-    }
+    PizzaParlor() { front = rear = -1; }
     bool isFull() {
-        return count == MAX;
+        return (front == 0 && rear == MAX-1) || (front == rear+1);
     }
     bool isEmpty() {
-        return count == 0;
+        return (front == -1);
     }
-    void placeOrder(int orderID) {
-        if (isFull()) {
-            cout << "Cannot place order. Pizza Parlor is full!" << endl;
-            return;
-        }
-        rear = (rear + 1) % MAX;
-        orders[rear] = orderID;
-        if (front == -1)
-            front = 0;
-        count++;
-        cout << "Order " << orderID << " placed successfully." << endl;
+    void placeOrder(int id) {
+        if(isFull()) { cout<<"Parlor Full!\n"; return; }
+        if(front==-1) front=0;
+        rear=(rear+1)%MAX;
+        q[rear]=id;
+        cout<<"Order "<<id<<" placed.\n";
     }
     void serveOrder() {
-        if (isEmpty()) {
-            cout << "No orders to serve!" << endl;
-            return;
-        }
-        cout << "Order " << orders[front] << " has been served." << endl;
-        front = (front + 1) % MAX;
-        count--;
-        if (count == 0) {
-            front = rear = -1; 
-        }
+        if(isEmpty()) { cout<<"No orders.\n"; return; }
+        cout<<"Order "<<q[front]<<" served.\n";
+        if(front==rear) front=rear=-1;
+        else front=(front+1)%MAX;
     }
-    void displayOrders() {
-        if (isEmpty()) {
-            cout << "No pending orders." << endl;
-            return;
+    void display() {
+        if(isEmpty()) { cout<<"No pending orders.\n"; return; }
+        cout<<"Pending Orders: ";
+        int i=front;
+        while(true) {
+            cout<<q[i]<<" ";
+            if(i==rear) break;
+            i=(i+1)%MAX;
         }
-        cout << "Current Orders: ";
-        int i = front;
-        for (int j = 0; j < count; j++) {
-            cout << orders[i] << " ";
-            i = (i + 1) % MAX;
-        }
-        cout << endl;
+        cout<<endl;
     }
 };
 int main() {
-    PizzaParlor parlor;
-    int choice, orderID;
-    cout << "\nPIZZA PARLOR ORDER SYSTEM\n";
-    while (true) {
-        cout << "\n1. Place Order\n2. Serve Order\n3. Display Orders\n4. Exit\n";
-        cout << "Enter your choice: ";
-        cin >> choice;
-        switch (choice) {
+    PizzaParlor p;
+    int ch,id;
+    cout<<"--- Pizza Parlor System ---\n";
+    do {
+        cout<<"\n1.Place Order\n2.Serve Order\n3.Display Orders\n4.Exit\nEnter choice: ";
+        cin>>ch;
+        switch(ch) {
             case 1:
-                cout << "Enter Order ID: ";
-                cin >> orderID;
-                parlor.placeOrder(orderID);
+                cout<<"Enter Order ID: ";
+                cin>>id;
+                p.placeOrder(id);
                 break;
             case 2:
-                parlor.serveOrder();
+                p.serveOrder();
                 break;
             case 3:
-                parlor.displayOrders();
+                p.display();
                 break;
             case 4:
-                cout << "Thank you! Visit again.\n";
-                return 0;
-
+                cout<<"Exiting...\n"; break;
             default:
-                cout << "Invalid choice! Please try again.\n";
+                cout<<"Invalid choice!\n";
         }
-    }
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    } while(ch!=4);
     return 0;
 }
