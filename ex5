@@ -2,15 +2,15 @@
 #include <stack>
 #include <string>
 using namespace std;
-bool isBalanced(string expr) {
+bool isWellParenthesized(const string& expr) {
     stack<char> s;
     for (char ch : expr) {
         if (ch == '(' || ch == '{' || ch == '[') {
             s.push(ch);
-        } 
+        }
         else if (ch == ')' || ch == '}' || ch == ']') {
-            if (s.empty())
-                return false; 
+            if (s.empty())  // No opening bracket to match
+                return false;
             char top = s.top();
             s.pop();
             if ((ch == ')' && top != '(') ||
@@ -25,9 +25,9 @@ int main() {
     string expression;
     cout << "Enter an expression: ";
     getline(cin, expression);
-    if (isBalanced(expression))
-        cout << "Expression has properly balanced parentheses.\n";
+    if (isWellParenthesized(expression))
+        cout << "The expression is well parenthesized." << endl;
     else
-        cout << "Expression does NOT have properly balanced parentheses.\n";
+        cout << "The expression is NOT well parenthesized." << endl;
     return 0;
 }
