@@ -1,0 +1,39 @@
+Experiment No: 3 
+
+Title: Write a C++ program to store roll numbers of student in array who attended training program in 
+random order. Write function for searching whether particular student attended training program or not, 
+using Linear search and binary search. Compare these two algorithms with respect to the number of 
+comparisons required to find the given students. 
+Aim: 
+To implement the basic search algorithms. 
+
+
+Experiment No: 4 
+ 
+Title: Write a program to store first year percentage of students in array. Write function for sorting array 
+of floating-point numbers in ascending order using 
+a) Selection Sort 
+b) Bubble sort and display top five scores. 
+Aim:   
+Program to preform selection sort and bubble sort on array to display top 5 scores
+
+
+Experiment No: 5 
+
+Title:- Program to check given expression for presence of proper parenthesis using stack 
+
+Problem Statement:- 
+In any language program mostly syntax error occurs due to unbalancing delimiter such as (),{},[].  
+Write C++ program using stack to check whether given expression is well parenthesized or not. 
+
+
+Experiment No:-7 
+
+Aim: Program to perform operation in linked list 
+
+Problem Statement:- Write C++ program to maintain club member‘s information using singly linked list. 
+Store student PRN and Name. Write functions to: 
+a) Add and delete the members as well as president or even secretary. 
+b) Compute total number of members of club 
+c) Display members 
+d) Two linked lists exists for two divisions. concatenate two lists
